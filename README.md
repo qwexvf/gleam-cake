@@ -64,9 +64,34 @@ See [docs/examples/README.md](https://github.com/inoas/gleam-cake/blob/main/exam
 - [cake\_demo\_select\_join.gleam](https://github.com/inoas/gleam-cake/blob/main/examples/07_select_join/src/cake_demo_select_join.gleam)
 - [cake\_demo\_prepared\_fragment.gleam](https://github.com/inoas/gleam-cake/blob/main/examples/08_prepared_fragment/src/cake_demo_prepared_fragment.gleam)
 <!--
-- transactions -- TODO v2
 - create view -- TODO v3
 -->
+
+### Transactions
+
+Each adapter exposes a `with_transaction` function that wraps a callback in a
+database transaction. The callback receives the same connection and must return
+a `Result`. On `Ok` the transaction is committed; on `Error` it is rolled back.
+
+```gleam
+import cake/transaction as t
+
+// Commit
+adapter.with_transaction(conn, fn(txn) {
+  use _ <- result.try(insert_query |> adapter.run_write_query(decode.dynamic, txn))
+  select_query |> adapter.run_read_query(my_decoder, txn)
+})
+// -> Result(List(Row), t.TransactionError(QueryError))
+
+// Rollback — return Error from the callback
+adapter.with_transaction(conn, fn(txn) {
+  use _ <- result.try(insert_query |> adapter.run_write_query(decode.dynamic, txn))
+  Error(t.TransactionRolledBack("something went wrong"))
+})
+```
+
+See [`test/cake_test/transaction_test.gleam`](https://github.com/inoas/gleam-cake/blob/main/test/cake_test/transaction_test.gleam)
+for commit and rollback examples across all four dialects.
 
 ### Unit tests as examples
 
@@ -90,6 +115,7 @@ import cake/insert as i // INSERT statements
 import cake/delete as d // DELETE statements
 import cake/combined as c // For combined queries such as UNION
 import cake/fragment as f // For arbitrary SQL code including functions
+import cake/transaction as t // For transaction error types
 ```
 
 ## Library Design
