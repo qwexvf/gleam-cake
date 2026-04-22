@@ -26,6 +26,12 @@ fn setup_database_default_values(conn) {
   let _ = test_data.insert_counters_rows() |> sqlite.execute_raw_sql(conn)
 }
 
+pub fn with_setup_connection(callback callback) {
+  use conn <- with_local_test_connection
+  let _ = setup_database_default_values(conn)
+  callback(conn)
+}
+
 pub fn setup_and_run(query) {
   use conn <- with_local_test_connection
 

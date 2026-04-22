@@ -33,6 +33,13 @@ fn setup_database_default_values(conn) {
   let _ = test_data.insert_counters_rows() |> maria.execute_raw_sql(conn)
 }
 
+pub fn with_setup_connection(callback callback) {
+  use conn <- with_local_test_connection
+  let assert Ok(_) = setup_database_default_values(conn)
+    as "setup database default"
+  callback(conn)
+}
+
 pub fn setup_and_run(query) {
   use conn <- with_local_test_connection
 

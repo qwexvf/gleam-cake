@@ -114,6 +114,23 @@ pub fn execute_raw_sql(
   sql_string |> sqlight.exec(on: db_connection)
 }
 
+pub fn with_transaction(
+  db_connection conn: Connection,
+  callback callback: fn(Connection) -> Result(a, e),
+) -> Result(a, e) {
+  let assert Ok(_) = sqlight.exec("BEGIN;", conn)
+  case callback(conn) {
+    Ok(v) -> {
+      let assert Ok(_) = sqlight.exec("COMMIT;", conn)
+      Ok(v)
+    }
+    Error(e) -> {
+      let _ = sqlight.exec("ROLLBACK;", conn)
+      Error(e)
+    }
+  }
+}
+
 fn cake_param_to_client_param(param param: Param) -> Value {
   case param {
     BoolParam(param) -> sqlight.bool(param)

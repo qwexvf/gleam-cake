@@ -1,0 +1,34 @@
+---
+version: 1.5.5
+title: transaction_rollback_test
+---
+#(
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+  ]),
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+  ]),
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+  ]),
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+  ]),
+)

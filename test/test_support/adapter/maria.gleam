@@ -16,7 +16,10 @@ import gleam/list
 import gleam/option.{type Option, None, Some}
 import gleam/string
 import gleam/time/calendar
-import shork.{type Connection, type QueryError, type Returned, type Value}
+import shork.{
+  type Connection, type QueryError, type Returned, type TransactionError,
+  type Value,
+}
 
 /// Connection to a MariaDB database.
 ///
@@ -128,6 +131,13 @@ pub fn run_query(
     CakeWriteQuery(write_query) ->
       write_query |> run_write_query(decoder, db_connection)
   }
+}
+
+pub fn with_transaction(
+  db_connection conn: Connection,
+  callback callback: fn(Connection) -> Result(a, error),
+) -> Result(a, TransactionError) {
+  shork.transaction(conn, callback)
 }
 
 pub fn execute_raw_sql(

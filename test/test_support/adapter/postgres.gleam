@@ -14,7 +14,10 @@ import gleam/dynamic/decode.{type Decoder}
 import gleam/erlang/process
 import gleam/list
 import gleam/option.{type Option}
-import pog.{type Connection, type QueryError, type Returned, type Value}
+import pog.{
+  type Connection, type QueryError, type Returned, type TransactionError,
+  type Value,
+}
 
 pub fn with_connection(
   process process: process.Name(pog.Message),
@@ -147,6 +150,13 @@ fn cake_param_to_client_param(param param: Param) -> Value {
     NullParam -> pog.null()
     DateParam(param) -> pog.calendar_date(param)
   }
+}
+
+pub fn with_transaction(
+  db_connection conn: Connection,
+  callback callback: fn(Connection) -> Result(a, error),
+) -> Result(a, TransactionError(error)) {
+  pog.transaction(conn, callback)
 }
 
 fn pog_parameters(

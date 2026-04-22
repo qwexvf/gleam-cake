@@ -1,0 +1,38 @@
+---
+version: 1.5.5
+title: transaction_commit_test
+---
+#(
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+    #("TxCat"),
+  ]),
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+    #("TxCat"),
+  ]),
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+    #("TxCat"),
+  ]),
+  Ok([
+    #("Biffy"),
+    #("Clara"),
+    #("Ginny"),
+    #("Karl"),
+    #("Nubi"),
+    #("TxCat"),
+  ]),
+)
